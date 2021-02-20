@@ -1,0 +1,313 @@
+{% extends 'base.html'%}
+{% block content %}
+{% load static %}
+
+    
+        <!-- Page Content  -->
+        
+        <h1>{{check}}</h1>
+            <div class="row">
+              <h5 style="color: white; padding-left: 2%;padding-top: 4%;"><b>Want to search again?</b></h5> 
+              <a style="color: white; padding-left: 0.5%;padding-top: 4%;" class="add-btn" href="{% url 'location' %}" data-content="Click Here">Click Here</a>
+            </div>
+        <!-- Stack the columns on mobile by making one full-width and the other half-width -->
+         <div class="line"></div>
+            <div class="row">
+              <div class="col-12 col-md-6">
+
+                    <div class="card">
+                          <div class="card-header"><b>Gathered Tweets around from here</b></div>
+                          <div class="card-body">
+                        <!-- FOLIUM MAP -->
+                        <div>
+                           <div class="">
+                              <div class="" style="width: 100%">
+                               <h1 class="mt-5"></h1>
+                               <p class="lead">{{myMap|safe}}</p>
+                              </div>
+                           </div>
+                        </div>
+
+                        <!-- END FOLIUM MAP -->                      
+                          </div>
+                      </div>
+              </div>
+              <div class="col-6 col-md-6">
+                <div class="card">
+                   <div class="card-header"><b>Most Frequently Used Words</b></div>
+                    <div class="card-body">
+                        <img style="width: 100%; height: 300px;" src="{% static 'dc/images/WordCloud.png' %}">
+                    </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="line"></div>
+
+            <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
+            <div class="row">
+              
+              <div class="col-6 col-md-4">
+                  <div class="card">
+                    <!-- <div class="card-header">Doughnut Chart</div> -->
+                    <div class="card-body">
+                      <div>
+                          <canvas id="myChart2"></canvas>
+                      </div>
+                    </div>
+                  </div>                  
+              </div>
+              
+              <div class="col-6 col-md-4">
+                <div class="card">
+                  <!--   <div class="card-header">Pie Chart</div> -->
+                    <div class="card-body">
+                      <div>
+                        <canvas id="myChart1"></canvas>
+                      </div>
+                    </div>
+                </div>
+              </div>
+
+              <div class="col-6 col-md-4">
+                <div class="card">
+                  <!--    <div class="card-header">Bar Chart</div> -->
+                  <div class="card-body">
+                    <div>
+                        <canvas id="myChart"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+         <div class="line"></div>
+
+            <div class="row">
+              <div class="col-12 col-md-8">
+                  <div class="card">
+                      <!-- <div class="card-header">Line Graph</div> -->
+                      <div class="card-body">
+                        <div>
+                          <canvas id="lineChart2"></canvas>
+                        </div>
+                      </div>
+                  </div>
+              </div>
+              
+              <div class="col-6 col-md-4">
+                <div class="card">
+                  <!--  <div class="card-header">SECOND BAR</div> -->
+                  <div class="card-body">
+                    <div>
+                      <canvas id="barChart2"></canvas>
+                    </div>        
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          <div class="line"></div>
+          <div class="row">
+            <div class="col-12 col-md-8">
+              <div class="card" style="max-height: 400px!important;">
+                <div class="card-header"><b>Most Recent Tweets </b></div>
+                <div class="card-body">
+                  <div class="scrollable">
+                    <table class="table">
+                      <tbody>
+                    {% for i in tweetList %}
+                          {% if i.op == 'Positive' %}
+
+                              <tr class="success">
+                                <td>
+                                    <span> <strong> {{ i.user }}  </strong> </span><hr class="success"> 
+                                    {{i.text}}
+                                </td>
+                              </tr>
+                          {% endif %}
+
+                          {% if i.op == 'Negative' %}
+
+                              <tr class="danger">
+                                <td>
+                                    <span> <strong> {{ i.user }}  </strong> </span><hr class="danger"> 
+                                    {{i.text}}
+                                </td>
+                              </tr>                          
+                          {% endif %}
+
+                          {% if i.op == 'Neutral' %}
+                            <tr class="info">
+                                <td>
+                                    <span> <strong> {{ i.user }}  </strong> </span><hr class="info"> 
+                                    {{i.text}}
+                                </td>
+                              </tr>
+                          {% endif %}
+                {% endfor %}
+                     </tbody>
+                    </table>
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        
+        
+  <!-- PAGE CONTENT END -->
+    
+
+    <div class="overlay"></div>
+
+    <!-- bar chart -->
+    <script type="text/javascript">
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'horizontalBar',
+
+            // The data for our dataset
+            data: {
+                // collecting labels from backend ,safe word to remove code and hexadecimal values
+                labels: {{lab|safe}},
+                datasets: [{
+                    label: 'tweetcounts',
+                    backgroundColor: 'rgb(255, 99, 132,0.5)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    //collecting data from backend 
+                    data: {{dc|safe}}
+                }]
+            },
+
+            // Configuration options go here
+            options: {}
+        });
+
+</script>
+    <script type="text/javascript">
+        // For a pie chart
+        var ctx1 = document.getElementById('myChart1').getContext('2d');
+            var myPieChart = new Chart(ctx1, {
+                    type: 'pie',
+                    data: {
+                datasets: [{
+                    label: 'Pie Chart',
+                    backgroundColor: ['#ff3333','#00e600','#33bbff'],
+                    borderColor: 'rgb(0,0,0)',
+                    data: {{dc|safe}}
+                }],
+
+                // These labels appear in the legend and in the tooltips when hovering different arcs
+                labels: {{lab|safe}}
+            },
+               
+            });
+        </script>
+        <script type="text/javascript">
+            var ctx2 = document.getElementById('myChart2').getContext('2d');
+                var myPieChart = new Chart(ctx2, {
+                    type: 'doughnut',
+                    data: {
+                datasets: [{
+                    label : 'Doughnut Chart',
+                    backgroundColor: ['red','green','blue'],
+                    borderColor: 'rgb(0,0,0)',
+                    data: {{dc|safe}}
+                }],
+
+                // These labels appear in the legend and in the tooltips when hovering different arcs
+                labels: {{lab|safe}}
+            },
+               
+            });
+        </script>
+        <script type="text/javascript">
+            var ctx3 = document.getElementById('lineChart2').getContext('2d');
+                var chart = new Chart(ctx3, {
+                   // The type of chart we want to create
+                   type: 'line',
+
+                   // The data for our dataset
+                   data: {
+                       labels: {{x|safe}},
+                     
+                        datasets: [{
+                        fill:false,
+                           label: 'Positive',
+                           backgroundColor: '#00FF66',
+                           borderColor: '#00FF66',
+                           data: {{p|safe}},
+                       },
+
+                       { fill:false,
+                           label: 'Neutral',
+                           backgroundColor: '#099FFF',
+                           borderColor: '#099FFF',
+                           data: {{N|safe}},
+                       },
+
+                       { fill:false,
+                           label: 'Negative',
+                           backgroundColor: '#FD1C03',
+                           borderColor: '#FD1C03',
+                           data: {{n|safe}},
+                       }
+
+
+
+
+
+                       ]
+                   },
+
+                   // Configuration options go here
+                   options: {}
+                });
+        </script>
+        <script type="text/javascript">
+            var ctx4 = document.getElementById('barChart2').getContext('2d');
+                var chart = new Chart(ctx4, {
+                   // The type of chart we want to create
+                   type: 'bar',
+
+                   // The data for our dataset
+                   data: {
+                       labels: {{x|safe}},
+                     
+                        datasets: [{
+                        fill:false,
+                           label: 'Positive',
+                           backgroundColor: '#00FF66',
+                           borderColor: '#00FF66',
+                           data: {{p|safe}},
+                       },
+
+                       { fill:false,
+                           label: 'Neutral',
+                           backgroundColor: '#099FFF',
+                           borderColor: '#099FFF',
+                           data: {{N|safe}},
+                       },
+
+                       { fill:false,
+                           label: 'Negative',
+                           backgroundColor: '#FD1C03',
+                           borderColor: '#FD1C03',
+                           data: {{n|safe}},
+                       }
+
+
+
+
+
+                       ]
+                   },
+
+                   // Configuration options go here
+                   options: {}
+                });
+        </script>
+
+ {% endblock %}

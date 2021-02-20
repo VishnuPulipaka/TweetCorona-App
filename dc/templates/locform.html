@@ -1,0 +1,429 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+	<title></title>  -->
+
+<!-- 		<map using highcharts links 
+	<script src="https://code.highcharts.com/maps/highmaps.js"></script>
+	<script src="https://code.highcharts.com/maps/modules/data.js"></script>
+	<script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+	<script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
+	<script src="https://code.highcharts.com/mapdata/custom/world.js"></script>
+	 Chart.js 
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+ Flag sprites service provided by Martijn Lafeber, https://github.com/lafeber/world-flags-sprite/blob/master/LICENSE 
+<link rel="stylesheet" type="text/css" href="//github.com/downloads/lafeber/world-flags-sprite/flags32.css" />
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"> -->
+{% extends 'base.html'%}
+{% load static %}
+{% block content %}
+<!-- <style type="text/css">
+.table-dark {
+	width: 200px;
+	background-color: black;
+}
+
+.table-dark tbody{
+	display: block;
+	height: 300px;
+	overflow-y: auto; 
+}
+.table-dark tr{
+	display: block;
+}
+.table-dark thead th{
+		width: 68%;
+		color: red;
+}
+
+</style> -->
+
+<!-- </head>
+<body> -->
+	{% if comeOn %}
+		<h2> Sorry,please enter a valid location! </h2>
+	{% endif %}
+  	
+	
+  	<form method="POST" autocomplete="off">
+				<!-- csrf for security -->
+				{% csrf_token %}
+				<!-- <div class="wrapper"> -->
+				<div class="wrapper-s">
+				    <div class="search-box">
+				      <input type="text" value="" class="form-s" name="entered_location" placeholder="What location are we looking for?" required>
+				      <div class="icon"> <button  type="submit" href="{% url 'home' %}"><i class="fas fa-search"></i></button></div>				      
+				      <div class="autoSugg">
+				        
+				      </div>
+				  	<!-- </div -->
+				  	
+				  </div>
+				  
+				</div>
+				<!-- {{form}} -->
+				
+			<!-- 	<input type="submit" href="{% url 'home' %}" value="submit" onclick="messageLoading()"> -->
+				
+	</form>
+		
+
+	<br><br>
+
+	<div class="row" style="margin-left: auto; margin-right: auto;">
+		<div class="col-md-6">
+			<div class="card">
+				<div class="card-header"><a class="search-btn" onclick="loadGif()">Gif</a></div>
+				<div class="card-body">
+				<div class="main-img">
+					<img id="gif" src="../../static/dc/images/COVID19_Map.gif" style="width:100%;height: 100%;"></div>
+					
+				</div>		
+			</div>
+
+			<div class="card" style="margin-right: auto; margin-top: 20px;">
+				<div class="card-header">
+						<b>COVID-19 CASES ANALYSIS</b>
+					</div>
+				<div class="card-body">
+					<div style="margin: 5px 5px 5px 5px; height: 60%; width: 90%;">
+						<canvas id="myChart4"></canvas>
+					</div>					
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="card">
+				<div class="card-header">
+						<b>Hover To Find Your Country Here!</b>
+					</div>
+  				<div class="card-body">
+    				<div id="container" style="height: 500px;width: 100%;"></div>
+  				</div>
+			</div>
+		</div>
+	</div>
+	
+
+	<!-- CONFIRMED CASES TABLE -->
+	
+		
+	<div style="margin-top: 20px;">
+		<div class="row">
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-header">
+						<b>Confirmed Cases</b> : {{tc}}
+					</div>
+					<div class="card-body">
+						<div class="scroll">
+						<table>
+							<thead>
+							<!-- 	<th>Country</th>
+								<th>Values</th> -->
+							</thead>
+							<tbody>
+							{% for i in confirmedCases %}
+							<tr>
+								<td><b>{{i.Country}}</b></td>
+								<td>{{i.values}}</td>
+							</tr>
+							{% endfor %}			
+							</tbody>		
+						</table>
+					</div>
+
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-header">
+						<b>Global Deaths</b> : {{totalDeaths}}
+					</div>
+					<div class="card-body">
+						<div class="scroll">
+						<table>
+							<thead>
+								<!-- <th>Country</th>
+								<th>Values</th> -->
+							</thead>
+							<tbody>
+							{% for i in deaths_table %}
+							<tr>
+								<td><b>{{i.Country}}</b></td>
+								<td>{{i.values}}</td>
+							</tr>
+							{% endfor %}			
+							</tbody>		
+						</table>
+					</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4">
+				<div class="card">
+					<div class="card-header">
+						<b>Global Recovered Cases </b> : {{totalRecovered}}
+					</div>
+					<div class="card-body">
+						 <div class="scroll">
+							<table>
+							<thead>
+								<!-- <th>Country</th>
+								<th>Values</th> -->
+							</thead>
+							<tbody>
+							{% for i in recoveredCases %}
+							<tr>
+								<td><b>{{i.Country}}</b></td>
+								<td>{{i.values}}</td>
+							</tr>
+							{% endfor %}			
+							</tbody>
+						</table>
+						 </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+
+	<div class="row">
+		<div class="col-md-6">	
+			<div class="card" style="margin-top: 20px;">
+				<div class="card-header">
+						<b>COVID-19 CASES FROM PAST FEW DAYS</b>
+					</div>
+				<div class="card-body">
+					<div style="margin: 30px 30px 30px 30px; height: 90%; width: 90%;">
+						<canvas id="myChart"></canvas>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="col-md-6">	
+			<div class="card" style="margin-top: 20px;">
+					<div class="card-header">
+						<b>COVID-19 CASES TODAY</b>
+					</div>
+				<div class="card-body">
+					<div style="margin: 30px 30px 30px 30px; height: 90%; width: 90%;">
+						<canvas id="myChart5"></canvas>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+<!-- 		<div style="margin: 30px 30px 30px 30px; height: 700px; width: 700px;">
+			<canvas id="myChart1"></canvas>
+		</div>
+		<div style="margin: 30px 30px 30px 30px; height: 700px; width: 700px;">
+			<canvas id="myChart2"></canvas>
+		</div> -->
+
+
+<script type="text/javascript">
+		function messageLoading(){
+			var testInp = document.getElementById('message')
+			/*document.getElementById('message').innerHTML="Fetching data from twitter...."*/
+			if(testInp=="None"){
+				testInp.innerHTML = "Unable to find given location coordinates. Try giving nearest city of your input location!";
+			}else{
+				testInp.innnerHTML = "";
+			}
+
+		}
+
+		function loadGif(){
+			var gif=document.getElementById('gif')
+			gif.src='../../static/dc/images/COVID19_Map.gif'
+		}
+	var data = {{mapData|safe}};
+	Highcharts.getJSON('https://cdn.jsdelivr.net/gh/highcharts/highcharts@v7.0.0/samples/data/world-population-density.json', function (data) {
+
+    Highcharts.mapChart('container', {
+        chart: {
+            borderWidth: 1,
+            map: 'custom/world',
+            backgroundColor: '#171717'
+        },
+
+        title: {
+            text: 'Confirmed cases heat map',
+            style:{
+            	color:'white'
+            },
+        },
+
+        legend: {
+            enabled: false
+        },
+
+        mapNavigation: {
+            enabled: true,
+            buttonOptions: {
+                verticalAlign: 'bottom'
+            }
+        },
+
+        series: [{
+            name: 'Countries',
+            color: '#808088',
+            enableMouseTracking: true
+        }, {
+            type: 'mapbubble',
+            name: 'Confirmed Cases',
+            color:'#ff4d40',
+            joinBy: ['iso-a3', 'code3'],
+            data: {{mapData|safe}},
+            minSize: 4,
+            maxSize: '12%',
+            tooltip: {
+                pointFormat: '<span class="f32"></span> {point.name}<br>' +
+		                '<span style="font-size:15px">{point.z}</span>'
+            }
+        }]
+    });
+});
+</script>
+	<script type="text/javascript">
+		var ctx = document.getElementById('myChart').getContext('2d');
+			var chart = new Chart(ctx, {
+			    // The type of chart we want to create
+			    type: 'line',
+
+			    // The data for our dataset
+			    data: {
+			        labels: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+			        datasets: [{
+			        	fill:false,
+			            label: 'Confirmed Cases Timeline',
+			            backgroundColor: 'rgb(255, 99, 132)',
+			            borderColor: 'rgb(0,0,0)',
+			            data: {{cases_list|safe}}
+			        },
+
+			        {
+			            fill:false,
+			            label: 'Recovered Cases Timeline',
+			            backgroundColor: 'rgb(224,255,255)',
+			            borderColor: 'rgb(0,128,128)',
+			            data: {{recover_list|safe}}
+			        },
+			        {
+			        	fill:false,
+			            label: 'Global Deaths Timeline',
+			            backgroundColor: 'rgb(255,127,80)',
+			            borderColor: 'rgb(255,69,0)',
+			            data: {{deaths_list|safe}}
+			        },]
+			    },
+
+			    // Configuration options go here
+			    options: {}
+			});
+		</script>
+    <script type="text/javascript">
+        var ctx4 = document.getElementById('myChart4').getContext('2d');
+        var chart = new Chart(ctx4, {
+            // The type of chart we want to create
+            type: 'horizontalBar',
+
+            // The data for our dataset
+            data: {
+               
+                labels: ["TOTAL CASES","TOTAL RECOVERED","TOTAL DEATHS"],
+                datasets: [{
+                	barPercentage: 0.2,
+                    backgroundColor:['#099FFF','#00FF66','#FD1C03'],
+                    borderColor: ['#099FFF','#00FF66','#FD1C03'],
+                    //collecting data from backend 
+                    data: [{{tc|safe}},{{totalRecovered|safe}},{{totalDeaths|safe}}]
+                }]
+            },
+
+            // Configuration options go here
+            options: {
+            	legend:{
+            		display:false
+            	}
+            }
+        });
+
+</script>
+<script type="text/javascript">
+	var maxLim = Math.max({{todayConfirmed|safe}},{{todayRecovered|safe}},{{todayDeaths|safe}});
+	var minLim = Math.min({{todayConfirmed|safe}},{{todayRecovered|safe}},{{todayDeaths|safe}});
+	var ctx5 = document.getElementById('myChart5').getContext('2d');
+	var ch = new Chart(ctx5, {
+		    data: {
+		    	datasets: [{
+		    		backgroundColor:['rgb(0,255,255,0.5)','rgb(0,255,0,0.5)','rgb(255,0,0,0.5)'],
+		    			data: [	{{todayConfirmed|safe}},
+								{{todayRecovered|safe}},
+									{{todayDeaths|safe}} 
+								]
+		    	}],
+
+
+		    	labels:["confirmed Cases","Recovered Cases","Deaths"]
+		    },
+
+		    type: 'polarArea',
+		    options: {
+		    	scale:{
+		    		ticks:{
+		    			min:minLim-100000,
+		    			max:maxLim+1000,
+		    		}
+		    	}
+		    }
+		});
+</script>
+	<!-- <script type="text/javascript">
+		var ctx1 = document.getElementById('myChart1').getContext('2d');
+			var chart = new Chart(ctx1, {
+			    // The type of chart we want to create
+			    type: 'line',
+
+			    // The data for our dataset
+			    data: {
+			        labels: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+			        datasets: []
+			    },
+
+			    // Configuration options go here
+			    options: {}
+			});
+		</script>
+	<script type="text/javascript">
+		var ctx2 = document.getElementById('myChart2').getContext('2d');
+			var chart = new Chart(ctx2, {
+			    // The type of chart we want to create
+			    type: 'line',
+
+			    // The data for our dataset
+			    data: {
+			        labels: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+			        datasets: [{
+			            label: 'Global Deaths Timeline',
+			            backgroundColor: 'rgb(255,127,80)',
+			            borderColor: 'rgb(255,69,0)',
+			            data: {{deaths_list|safe}}
+			        }]
+			    },
+
+			    // Configuration options go here
+			    options: {}
+			});
+		</script> -->
+{% endblock %}
+<!-- </body>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script> 
+</html>

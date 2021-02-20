@@ -1,0 +1,8 @@
+{% extends 'base.html'%}
+{% block content %}
+<div class="errorPage" style="margin: auto; padding-left: 10px;padding-top: 50px;">
+	<p style="color: white;font-weight: bold;"> Oh Snap! We couldn't find any related tweets!</p>
+	<b style="color: white;">Back To</b> <a href="{% url 'location' %}" style="color: white;font-weight: lighter; text-decoration: underline;">Home Page</a> 
+</div>
+
+{% endblock %}

@@ -1,0 +1,311 @@
+/*
+    DEMO STYLE
+*/
+
+@import "https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700";
+body {
+    font-family: 'Poppins', sans-serif;
+    background:#05386B ;
+}
+
+p {
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.1em;
+    font-weight: 300;
+    line-height: 1.7em;
+    color: #999;
+}
+
+.main-img{
+    width: 100%;
+    height: 20vw;
+    object-fit: cover;
+}
+.wrapper .search-box{
+  background: #fff;
+  width: 100%;
+  border-radius: 5px;
+  position: relative;
+  box-shadow: 0px 1px 5px 3px rgba(0,0,0,0.12);
+}
+.search-box form{
+  height: 55px;
+  width: 100%;
+  outline: none;
+  border: none;
+  padding: 0 60px 0 20px;
+  font-size: 18px;
+  box-shadow: 0px 1px 5px rgba(0,0,0,0.1);
+}
+.search-box.active form{
+  border-radius: 5px 5px 5px 5px;
+}
+.search-box .autoSugg{
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+  max-height: 280px;
+  overflow-y: auto;
+}
+.search-box.active .autoSugg{
+  padding: 10px 8px;
+  opacity: 1;
+  pointer-events: auto;
+}
+.autoSugg li{
+  list-style: none;
+  padding: 8px 12px;
+  display: none;
+  width: 100%;
+  cursor: default;
+  /*border-radius: 3px;*/
+}
+.search-box.active .autoSugg li{
+  display: block;
+}
+.autoSugg li:hover{
+  background: #efefef;
+}
+
+.search-box .icon{
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  height: 55px;
+  width: 55px;
+  text-align: center;
+  line-height: 55px;
+  font-size: 20px;
+  color: #644bff;
+  cursor: pointer;
+}
+a,
+a:hover,
+a:focus {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+#form-align{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.navbar2 {
+    padding: 15px 10px;
+    background: black;
+    border: none;
+    border-radius: 0;
+    color: white;
+    margin-bottom: 40px;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-btn {
+    box-shadow: none;
+    outline: none !important;
+    border: none;
+}
+
+.line {
+    width: 100%;
+    height: 1px;
+    margin: 40px 0;
+}
+
+.scroll{
+    height: 250px; 
+    overflow-y: scroll;
+}
+.scrollable{
+    height: 250px; 
+    overflow-y: scroll;
+
+}
+/*.scrollable tr {
+      border: 2px solid black;
+      padding-top: 50px;
+      border-radius: 100px;
+}*/
+.card-body .scrollable table tr{
+  border-collapse: separate;
+}
+.card-body .scrollable .table .success{
+  border:2px solid green;
+}
+.card-body .scrollable .table .danger{
+  border:2px solid red;
+}
+.card-body .scrollable .table .info{
+  border:2px solid blue;
+}
+/*.scrollable table td{
+  border-spacing: 3em;
+}*/
+
+
+/* ---------------------------------------------------
+    CONTENT STYLE
+----------------------------------------------------- */
+
+#content {
+    width: 100%;
+    padding: 20px;
+    min-height: 100vh;
+    transition: all 0.3s;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.success {
+  background-color: rgba(20, 199, 0,0.5);
+}
+
+.info {
+  background-color: rgba(120, 240, 234,0.5);
+}
+
+.danger {
+  background-color: rgba(255, 82, 93, 0.8);
+}
+
+.wrapper-s{
+  max-width: 600px;
+  margin: 20px auto;
+  border-radius: 25px;
+}
+
+.wrapper-s .search-box{
+  background: #fff;
+  margin-top: 60px; 
+  width: 70%;
+  position: relative;
+  box-shadow: 0px 1px 5px 3px rgba(0,0,0,0.12);
+}
+
+.search-box input{
+  height: 50px;
+  width: 100%;
+  border: 3px solid #5CDB95;
+  border-radius: 5px 5px 5px 5px;
+  padding: 0 60px 0 20px;
+  font-size: 18px;
+  box-shadow: 0px 1px 5px rgba(0,0,0,0.1);
+
+}
+
+.search-box.active input{
+  border-radius: 5px 5px 0 0;
+}
+
+.search-box .autoSugg{
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.search-box.active .autoSugg{
+  padding: 10px 8px;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.autoSugg li{
+  list-style: none;
+  padding: 8px 12px;
+  display: none;
+  width: 100%;
+  cursor: default;
+  /*border-radius: 3px;*/
+}
+
+.search-box.active .autoSugg li{
+  display: block;
+}
+.autoSugg li:hover{
+  background: #efefef;
+}
+.search-box .icon{
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  height: 48px;
+  width: 54px;
+  background: #5CDB95;
+  border-radius: 0 5px 5px 0;
+  text-align: center;
+  line-height: 55px;
+  font-size: 20px;
+  color: #fff;
+  cursor: pointer;
+  border: none;
+  
+}
+
+
+.search-box button{
+  border: none;
+  height: 48px;
+  width: 50px;
+  background: #5CDB95; 
+}
+.search-box button:hover{
+  cursor: pointer;
+}
+.search-btn{
+   position: absolute;
+  right: 0px;
+  top: 0px;
+  height: 52px;
+  width: 54px;
+  background: #ffeb3b;
+  text-align: center;
+  line-height: 55px;
+  font-size: 20px;
+  color: #644bff;
+  cursor: pointer;
+  border: none;
+  border-radius: 25px;
+}
+.bg-nav{
+  margin: none;
+  background:#05386B;
+  border-bottom: 3px solid #5CDB95;
+  border-radius: 17px;
+  border-right: 5px solid #5CDB95; 
+}
+.nav-bar{
+  padding-top:0em !important;
+}
+a{
+  position: relative;
+  text-decoration: none;
+
+}
+a::before {
+  position: absolute;
+  text-decoration: bold;
+  content: attr(data-content);
+  overflow: hidden;
+  background-color:#5CDB95;
+  transition: width 275ms ease;
+  width: 0;
+  color:black;
+  white-space: nowrap;
+}
+a:hover::before {
+  width: 100%;
+  text-decoration: underline;
+}
+
+.card-header{
+  background-color: #5CDB95;
+}
+
+.card{
+  box-shadow: 0px 1px 5px 3px rgba(0,0,0,0.2);
+}
+
